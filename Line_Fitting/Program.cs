@@ -33,14 +33,27 @@ class Program
     }
 }
 
-static class ImageUtils //存放图像处理的方法
+/// <summary>
+/// 存放图像处理的方法
+/// </summary>
+static class ImageUtils
 {
-    public static Mat ConvertToGray(Mat originImage)    //灰度转换
+    /// <summary>
+    /// 灰度转换
+    /// </summary>
+    /// <param name="originImage"></param>
+    /// <returns></returns>
+    public static Mat ConvertToGray(Mat originImage)
     {
         Mat grayImage = new Mat();
         Cv2.CvtColor(originImage, grayImage, ColorConversionCodes.BGR2GRAY);
         return grayImage;
     }
+    /// <summary>
+    /// 获取像素坐标
+    /// </summary>
+    /// <param name="image"></param>
+    /// <returns></returns>
     public static List<Point> GetPixelCoordinate(Mat image)
     {
         List<Point> coordinate = new List<Point>();
@@ -56,6 +69,11 @@ static class ImageUtils //存放图像处理的方法
         }
         return coordinate;
     }
+    /// <summary>
+    /// 拟合直线并画线
+    /// </summary>
+    /// <param name="originImage"></param>
+    /// <param name="coordinate"></param>
     public static void FitLine(Mat originImage, List<Point> coordinate) //变量1是原始图像，为了在上面画线；变量2是边缘坐标
     {
         //将Point转换为数组
