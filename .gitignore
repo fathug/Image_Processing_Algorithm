@@ -11,7 +11,7 @@
 *.userosscache
 *.sln.docstates
 *.bmp
-##*.png
+*.png
 *.jpg
 *.sln
 /Line_Fitting/bin/
