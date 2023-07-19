@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "D:\\CSharpProject\\ConsoleApp0706\\直线拟合_OpenCv\\直线拟合_OpenCv.csproj": {}
+    "D:\\RepoPerson\\Image_Processing_Algorithm\\Line_Fitting\\直线拟合_OpenCv.csproj": {}
   },
   "projects": {
-    "D:\\CSharpProject\\ConsoleApp0706\\直线拟合_OpenCv\\直线拟合_OpenCv.csproj": {
+    "D:\\RepoPerson\\Image_Processing_Algorithm\\Line_Fitting\\直线拟合_OpenCv.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\CSharpProject\\ConsoleApp0706\\直线拟合_OpenCv\\直线拟合_OpenCv.csproj",
+        "projectUniqueName": "D:\\RepoPerson\\Image_Processing_Algorithm\\Line_Fitting\\直线拟合_OpenCv.csproj",
         "projectName": "直线拟合_OpenCv",
-        "projectPath": "D:\\CSharpProject\\ConsoleApp0706\\直线拟合_OpenCv\\直线拟合_OpenCv.csproj",
+        "projectPath": "D:\\RepoPerson\\Image_Processing_Algorithm\\Line_Fitting\\直线拟合_OpenCv.csproj",
         "packagesPath": "C:\\Users\\weixy\\.nuget\\packages\\",
-        "outputPath": "D:\\CSharpProject\\ConsoleApp0706\\直线拟合_OpenCv\\obj\\",
+        "outputPath": "D:\\RepoPerson\\Image_Processing_Algorithm\\Line_Fitting\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\weixy\\AppData\\Roaming\\NuGet\\NuGet.Config",

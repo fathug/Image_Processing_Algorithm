@@ -1,14 +1,15 @@
-﻿using System;
-using OpenCvSharp;
+﻿using OpenCvSharp;
+using System;
 
-class Program
+internal class Program
 {
     static void Main()
     {
-        string inputPath = "D:/CSharpProject/ConsoleApp0706/直线拟合_OpenCv/image.png";
-        string inputPath2 = "D:/CSharpProject/ConsoleApp0706/直线拟合_OpenCv/pad.png";
-        string outputPath = "D:/CSharpProject/ConsoleApp0706/直线拟合_OpenCv/image_out.png";
-        string outputPath2 = "D:/CSharpProject/ConsoleApp0706/直线拟合_OpenCv/image_out2.png";
+        //相对路径是以exe文件为根目录的，一般exe存放在\bin\Debug\net6.0中
+        string inputPath = @"..\..\..\image.png";
+        string inputPath2 = @"..\..\..\pad.png";
+        string outputPath = @"..\..\..\image_out.png";
+        string outputPath2 = @"..\..\..\image_out2.png";
 
         Mat originImage = Cv2.ImRead(inputPath, ImreadModes.Color);
         Mat originImage2 = Cv2.ImRead(inputPath2, ImreadModes.Color);
@@ -36,13 +37,11 @@ class Program
 /// <summary>
 /// 存放图像处理的方法
 /// </summary>
-static class ImageUtils
+internal static class ImageUtils
 {
     /// <summary>
     /// 灰度转换
     /// </summary>
-    /// <param name="originImage"></param>
-    /// <returns></returns>
     public static Mat ConvertToGray(Mat originImage)
     {
         Mat grayImage = new Mat();
@@ -52,16 +51,14 @@ static class ImageUtils
     /// <summary>
     /// 获取像素坐标
     /// </summary>
-    /// <param name="image"></param>
-    /// <returns></returns>
     public static List<Point> GetPixelCoordinate(Mat image)
     {
         List<Point> coordinate = new List<Point>();
-        for (int y=0; y<image.Rows; y++)
+        for (int y = 0; y < image.Rows; y++)
         {
-            for (int x=0; x<image.Cols; x++)
+            for (int x = 0; x < image.Cols; x++)
             {
-                if (image.Get<byte>(y,x)>128)
+                if (image.Get<byte>(y, x) > 128)
                 {
                     coordinate.Add(new Point(x, y));
                 }
@@ -72,15 +69,13 @@ static class ImageUtils
     /// <summary>
     /// 拟合直线并画线
     /// </summary>
-    /// <param name="originImage"></param>
-    /// <param name="coordinate"></param>
     public static void FitLine(Mat originImage, List<Point> coordinate) //变量1是原始图像，为了在上面画线；变量2是边缘坐标
     {
         //将Point转换为数组
         int n = coordinate.Count; //Point的数量
         double[] x = new double[n];
         double[] y = new double[n];
-        for (int i=0; i<n; i++)
+        for (int i = 0; i < n; i++)
         {
             x[i] = coordinate[i].X;
             y[i] = coordinate[i].Y;
@@ -91,7 +86,7 @@ static class ImageUtils
         double y_avg = y.Sum() / n;
         double sum1 = 0;
         double sum2 = 0;
-        for (int i = 0;i<n;i++)
+        for (int i = 0; i < n; i++)
         {
             sum1 += ((y[i] - y_avg) - (x[i] - x_avg));
             sum2 += ((y[i] - y_avg) * (y[i] - y_avg));
