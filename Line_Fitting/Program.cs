@@ -8,8 +8,8 @@ internal class Program
         //相对路径是以exe文件为根目录的，一般exe存放在\bin\Debug\net6.0中
         string inputPath = @"..\..\..\image.png";
         string inputPath2 = @"..\..\..\pad.png";
-        string outputPath = @"..\..\..\image_out.png";
-        string outputPath2 = @"..\..\..\image_out2.png";
+        string outputPath = @"..\..\..\image_out_gray.png";
+        string outputPath2 = @"..\..\..\image_out.png";
 
         Mat originImage = Cv2.ImRead(inputPath, ImreadModes.Color);
         Mat originImage2 = Cv2.ImRead(inputPath2, ImreadModes.Color);
