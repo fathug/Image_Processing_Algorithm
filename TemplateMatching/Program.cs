@@ -1,5 +1,5 @@
 ﻿//@"..\\..\\..\\B.bmp"
-//@"..\\..\\..\\B_cr.png"
+//@"..\\..\\..\\B_cr.bmp"
 
 
 using System;
@@ -9,27 +9,57 @@ class Program
 {
     static void Main(string[] args)
     {
-        // 加载源图像和模板图像
+        // Load source image and template image
         Mat sourceImage = new Mat(@"..\\..\\..\\B.bmp", ImreadModes.Color);
         Mat templateImage = new Mat(@"..\\..\\..\\B_cr.bmp", ImreadModes.Color);
 
-        // 模板匹配
-        Mat resultImage = new Mat();
-        Cv2.MatchTemplate(sourceImage, templateImage, resultImage, TemplateMatchModes.CCoeffNormed);
-        
-        // 找到最佳匹配位置
-        double minVal, maxVal;
+        // Get the size of the source and template images
+        int sourceWidth = sourceImage.Width;
+        int sourceHeight = sourceImage.Height;
+        int templateWidth = templateImage.Width;
+        int templateHeight = templateImage.Height;
+
+        // Create a result image to store the matching scores
+        Mat resultImage = new Mat(sourceHeight - templateHeight + 1, sourceWidth - templateWidth + 1, MatType.CV_32FC1);
+
+        // Calculate the squared differences (Sum of Squared Differences - SSD)
+        for (int y = 0; y < resultImage.Rows; y++)
+        {
+            for (int x = 0; x < resultImage.Cols; x++)
+            {
+                float sumSquaredDiffs = 0;
+
+                for (int ty = 0; ty < templateHeight; ty++)
+                {
+                    for (int tx = 0; tx < templateWidth; tx++)
+                    {
+                        float diff = (sourceImage.At<float>(y + ty, x + tx) - templateImage.At<float>(ty, tx));
+                        sumSquaredDiffs += diff * diff;
+                    }
+                }
+
+                resultImage.Set(y, x, sumSquaredDiffs);
+            }
+        }
+
+        // Normalize the result image
+        Cv2.Normalize(resultImage, resultImage, 0, 1, NormTypes.MinMax);
+
+        // Find the best match location
+        double minValue, maxValue;
         OpenCvSharp.Point minLoc, maxLoc;
-        Cv2.MinMaxLoc(resultImage, out minVal, out maxVal, out minLoc, out maxLoc);
+        Cv2.MinMaxLoc(resultImage, out minValue, out maxValue, out minLoc, out maxLoc);
 
-        // 在最佳匹配位置画出矩形
-        OpenCvSharp.Point matchLoc = maxLoc;
-        Cv2.Rectangle(sourceImage, matchLoc, new OpenCvSharp.Point(matchLoc.X + templateImage.Cols, matchLoc.Y + templateImage.Rows), Scalar.Red, 1);
+        // Draw a rectangle around the best match
+        Cv2.Rectangle(sourceImage, maxLoc, new OpenCvSharp.Point(maxLoc.X + templateWidth, maxLoc.Y + templateHeight), Scalar.Red, 2);
 
-        // 创建窗口显示结果
+        // Display the result image
         Cv2.NamedWindow("Result", WindowFlags.Normal);
         Cv2.ImShow("Result", sourceImage);
+
+        // Wait for a key press and then close the window
         Cv2.WaitKey(0);
         Cv2.DestroyAllWindows();
     }
 }
+
