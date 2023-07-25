@@ -9,20 +9,20 @@ class Program
 {
     static void Main(string[] args)
     {
-        // Load source image and template image
+        // 加载原图与模板
         Mat sourceImage = new Mat(@"..\\..\\..\\B.bmp", ImreadModes.Color);
         Mat templateImage = new Mat(@"..\\..\\..\\B_cr.bmp", ImreadModes.Color);
 
-        // Get the size of the source and template images
+        // 获取原图与模板的规格
         int sourceWidth = sourceImage.Width;
         int sourceHeight = sourceImage.Height;
         int templateWidth = templateImage.Width;
         int templateHeight = templateImage.Height;
 
-        // Create a result image to store the matching scores
+        // 创建空图来存储匹配结果
         Mat resultImage = new Mat(sourceHeight - templateHeight + 1, sourceWidth - templateWidth + 1, MatType.CV_32FC1);
 
-        // Calculate the squared differences (Sum of Squared Differences - SSD)
+        // 计算
         for (int y = 0; y < resultImage.Rows; y++)
         {
             for (int x = 0; x < resultImage.Cols; x++)
@@ -41,23 +41,19 @@ class Program
                 resultImage.Set(y, x, sumSquaredDiffs);
             }
         }
-
-        // Normalize the result image
         Cv2.Normalize(resultImage, resultImage, 0, 1, NormTypes.MinMax);
 
-        // Find the best match location
+        // 查找最匹配区域
         double minValue, maxValue;
         OpenCvSharp.Point minLoc, maxLoc;
         Cv2.MinMaxLoc(resultImage, out minValue, out maxValue, out minLoc, out maxLoc);
 
-        // Draw a rectangle around the best match
+        // 用矩形圈出最匹配区域
         Cv2.Rectangle(sourceImage, maxLoc, new OpenCvSharp.Point(maxLoc.X + templateWidth, maxLoc.Y + templateHeight), Scalar.Red, 2);
 
-        // Display the result image
+        // 显示
         Cv2.NamedWindow("Result", WindowFlags.Normal);
         Cv2.ImShow("Result", sourceImage);
-
-        // Wait for a key press and then close the window
         Cv2.WaitKey(0);
         Cv2.DestroyAllWindows();
     }
