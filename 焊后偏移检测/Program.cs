@@ -29,6 +29,7 @@ class Program
         //ransac去噪
         List<Point> edgePixel2 = ImageUtils.RansacPoint(edgePixel);
 
+        //直线拟合
         ImageUtils.FitLine(edgePixel2 , originImage);
         Cv2.ImShow("4直线拟合", originImage);
 
