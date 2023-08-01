@@ -204,6 +204,6 @@ static class ImageUtils
         Point pt2 = new Point(x2, y2);
 
         //在原图上画线
-        Cv2.Line(originImage, pt1, pt2, new Scalar(0, 255, 0), 1);  //执行之后，originImage的值发生改变
+        Cv2.Line(originImage, pt1, pt2, new Scalar(0, 255, 0), 2);  //执行之后，originImage的值发生改变
     }
 }
