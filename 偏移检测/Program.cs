@@ -14,7 +14,7 @@ class Program
         //读取图像
         Mat originImage = Cv2.ImRead(path_pad, ImreadModes.Color);
         //Cv2.ImShow("1原图", originImage);
-        
+
         //灰度转换
         Mat grayImage = new Mat();
         Cv2.CvtColor(originImage, grayImage, ColorConversionCodes.BGR2GRAY);
@@ -30,7 +30,7 @@ class Program
         List<Point> edgePixel2 = ImageUtils.RansacPoint(edgePixel);
 
         //直线拟合
-        ImageUtils.FitLine(edgePixel2 , originImage);
+        ImageUtils.FitLine(edgePixel2, originImage);
         Cv2.ImShow("4直线拟合", originImage);
 
 
@@ -81,7 +81,7 @@ static class ImageUtils
         {
             for (int x = 0; x < image.Cols; x++)
             {
-                if (image.Get<byte>(y, x) ==255)
+                if (image.Get<byte>(y, x) == 255)
                 {
                     coordinate.Add(new Point(x, y));
                 }

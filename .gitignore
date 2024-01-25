@@ -1,10 +1,8 @@
-/*/bin/
-/*/obj/
-/.vs/
-*.bmp
-*.jpg
-*.png
-*.webp
-*.sln
-*.csproj
+bin/
+obj/
+.vs/
+# *.bmp
+# *.jpg
+# *.png
+# *.webp
 *.pdf

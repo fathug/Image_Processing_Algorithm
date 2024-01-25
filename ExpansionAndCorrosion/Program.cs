@@ -7,7 +7,7 @@ class Program
     {
         string inputPath = @"..\..\..\example.bmp";
         Mat sourceImage = Cv2.ImRead(inputPath, ImreadModes.Color);
-        if(sourceImage.Empty())
+        if (sourceImage.Empty())
         {
             Console.WriteLine("未读取到图片");
         }
