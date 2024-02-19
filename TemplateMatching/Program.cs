@@ -1,60 +1,63 @@
-﻿// @"..\\..\\..\\B.bmp"
-// @"..\\..\\..\\B_cr.bmp"
-// 归一化的差值平方和算法
+﻿// 归一化的差值平方和算法
 
 using System;
+using System.Drawing;
+using System.Linq.Expressions;
 using OpenCvSharp;
 
-class Program
+namespace TemplateMatchingExample;
+
+static class Program
 {
     static void Main(string[] args)
     {
-        // 加载原图与模板
-        Mat sourceImage = new Mat(@"..\\..\\..\\B.bmp", ImreadModes.Color);
-        Mat templateImage = new Mat(@"..\\..\\..\\B_cr.bmp", ImreadModes.Color);
+        // 读取待匹配的图像和模板图像
+        Mat image = Cv2.ImRead("..\\..\\..\\connector.png", ImreadModes.Color);
+        Mat template = Cv2.ImRead("..\\..\\..\\connector_pattern.png", ImreadModes.Color);
 
-        // 获取原图与模板的规格
-        int sourceWidth = sourceImage.Width;
-        int sourceHeight = sourceImage.Height;
-        int templateWidth = templateImage.Width;
-        int templateHeight = templateImage.Height;
+        // 创建一个用于存储匹配结果的矩阵
+        Mat result = new Mat();
 
-        // 创建空图来存储匹配结果
-        Mat resultImage = new Mat(sourceHeight - templateHeight + 1, sourceWidth - templateWidth + 1, MatType.CV_32FC1);
+        // 使用模板匹配方法，这里使用归一化相关系数匹配法
+        Cv2.MatchTemplate(image, template, result, TemplateMatchModes.CCoeffNormed);
 
-        // 计算
-        for (int y = 0; y < resultImage.Rows; y++)
+        // 查找匹配度最高的区域
+        double minVal, maxVal;
+        OpenCvSharp.Point minLoc, maxLoc;
+        Cv2.MinMaxLoc(result, out minVal, out maxVal, out minLoc, out maxLoc);
+
+        // 设置匹配程度阈值
+        double threshold = 0.9;
+        List<Rectangle> matchRectangles = new List<Rectangle>();
+        for (int j = 0; j < result.Rows; j++)
         {
-            for (int x = 0; x < resultImage.Cols; x++)
+            for (int i = 0; i < result.Cols; i++)
             {
-                float sumSquaredDiffs = 0;
-
-                for (int ty = 0; ty < templateHeight; ty++)
+                var matchValue = result.At<float>(j, i);
+                if (matchValue > threshold)
                 {
-                    for (int tx = 0; tx < templateWidth; tx++)
-                    {
-                        float diff = (sourceImage.At<float>(y + ty, x + tx) - templateImage.At<float>(ty, tx));
-                        sumSquaredDiffs += diff * diff;
-                    }
+                    Console.WriteLine($"{matchValue}");
+                    Rectangle matchRectangle = new Rectangle(i, j, template.Width, template.Height);
+                    matchRectangles.Add(matchRectangle);
+                     Cv2.Rectangle(image, new OpenCvSharp.Point(matchRectangle.X, matchRectangle.Y), new OpenCvSharp.Point(matchRectangle.X + template.Width, matchRectangle.Y + template.Height), new Scalar(0, 255, 255), 1);
                 }
-
-                resultImage.Set(y, x, sumSquaredDiffs);
             }
         }
-        Cv2.Normalize(resultImage, resultImage, 0, 1, NormTypes.MinMax);
 
-        // 查找最匹配区域
-        double minValue, maxValue;
-        OpenCvSharp.Point minLoc, maxLoc;
-        Cv2.MinMaxLoc(resultImage, out minValue, out maxValue, out minLoc, out maxLoc);
+        // 在原图像上绘制匹配区域的矩形框
+        Rectangle matchRect = new Rectangle((int)minLoc.X, (int)minLoc.Y, template.Width, template.Height);
+        Cv2.Rectangle(image, maxLoc, new OpenCvSharp.Point(maxLoc.X + template.Width, maxLoc.Y + template.Height), new Scalar(0, 255, 0), 1);
 
-        // 用矩形圈出最匹配区域
-        Cv2.Rectangle(sourceImage, maxLoc, new OpenCvSharp.Point(maxLoc.X + templateWidth, maxLoc.Y + templateHeight), Scalar.Red, 2);
+        // 显示匹配结果
+        Console.WriteLine($"其中最大匹配值：{maxVal}");
 
-        // 显示
-        Cv2.NamedWindow("Result", WindowFlags.Normal);
-        Cv2.ImShow("Result", sourceImage);
+        Cv2.ImShow("Matched Template", image);
         Cv2.WaitKey(0);
         Cv2.DestroyAllWindows();
+
+        // 释放资源
+        image.Dispose();
+        template.Dispose();
+        result.Dispose();
     }
 }
