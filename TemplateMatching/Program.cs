@@ -1,4 +1,5 @@
-﻿// 归一化的差值平方和算法
+﻿// 匹配算法可以自己替换
+// 程序有多个目标匹配的功能
 
 using System;
 using System.Drawing;
