@@ -5,7 +5,7 @@ class Program
 {
     static void Main()
     {
-        string inputPath = @"..\..\..\example.bmp";
+        string inputPath = "../../../Images/img1.bmp";
         Mat sourceImage = Cv2.ImRead(inputPath, ImreadModes.Color);
         if (sourceImage.Empty())
         {
